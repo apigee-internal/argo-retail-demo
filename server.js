@@ -5,8 +5,10 @@ var resource = require('argo-resource');
 
 var Products = require('./products');
 
+var port = process.env.PORT || 3000;
+
 argo()
   .use(gzip)
   .use(router)
   .use(resource(Products))
-  .listen(3000);
+  .listen(port);

@@ -18,6 +18,7 @@ $ node server.js
 
 ```bash
 $ curl -i http://localhost:3000/products
+$ curl -i http://localhost:3000/products/helmet
 ```
 
 ## License
