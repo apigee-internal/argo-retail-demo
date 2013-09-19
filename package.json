@@ -1,0 +1,27 @@
+{
+  "name": "argo-retail-demo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A demo of a retail API on Argo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kevinswiber/argo-retail-demo.git"
+  },
+  "author": "Kevin Swiber <kswiber@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kevinswiber/argo-retail-demo/issues"
+  },
+  "dependencies": {
+    "argo": "~0.4.0-alpha.4",
+    "argo-gzip": "~0.1.5",
+    "argo-url-router": "0.0.3",
+    "argo-resource": "0.0.4",
+    "usergrid": "~0.10.5"
+  }
+}
