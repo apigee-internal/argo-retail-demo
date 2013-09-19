@@ -1,8 +1,6 @@
 # argo-retail-demo
 
-## Install
-
-Setup:
+## Setup
 
 ```bash
 $ git clone git@github.com:kevinswiber/argo-retail-demo.git && \
@@ -10,13 +8,13 @@ $ git clone git@github.com:kevinswiber/argo-retail-demo.git && \
   npm install
 ```
 
-Run:
+## Run
 
 ```bash
 $ node server.js
 ```
 
-Play:
+## Play
 
 ```bash
 $ curl -i http://localhost:3000/products
