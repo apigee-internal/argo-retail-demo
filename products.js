@@ -45,11 +45,15 @@ Products.prototype.show = function(env, next) {
 
   var options = {
     type: 'products',
-    name: name,
-    getOnExist: true
+    name: name
   };
 
-  this.client.createEntity(options, function(err, entity) {
+  this.client.getEntity(options, function(err, entity) {
+    if (err) {
+      env.response.statusCode = 404;
+      return next(env);
+    }
+
     var product = {
       name: entity.get('name'),
       price: entity.get('price')
