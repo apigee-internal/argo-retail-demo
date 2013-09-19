@@ -16,6 +16,12 @@ Run:
 $ node server.js
 ```
 
+Play:
+
+```bash
+$ curl -i http://localhost:3000/products
+```
+
 ## License
 
 MIT
