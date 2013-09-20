@@ -18,10 +18,10 @@
     "url": "https://github.com/kevinswiber/argo-retail-demo/issues"
   },
   "dependencies": {
-    "argo": "~0.4.0-alpha.4",
-    "argo-gzip": "~0.1.5",
-    "argo-url-router": "0.0.3",
-    "argo-resource": "0.0.4",
-    "usergrid": "~0.10.5"
+    "argo": "*",
+    "argo-gzip": "*",
+    "argo-url-router": "*",
+    "argo-resource": "*",
+    "usergrid": "*"
   }
 }
