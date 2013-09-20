@@ -13,6 +13,7 @@ Products.prototype.init = function(config) {
   config
     .path('/products')
     .produces('application/json')
+    .produces('application/vnd.siren+json')
     .get('/', this.list)
     .get('/{name}', this.show);
 };
