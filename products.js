@@ -43,23 +43,36 @@ Products.prototype.list = function(env, next) {
 
 
       var product = {
-        id: entity.get('name'),
-        name: entity.get('productname'),
-        image: entity.get('productimage'),
-        href: null
+        class: ['product'],
+        rel: ['item'],
+        properties: {
+          id: entity.get('name'),
+          name: entity.get('productname'),
+          image: entity.get('productimage')
+        },
+        links: []
       };
 
       var uri = env.argo.uri();
       var parsed = url.parse(uri);
       parsed.search = parsed.query = null;
-      parsed.pathname = path.join(parsed.pathname, product.id);
+      parsed.pathname = path.join(parsed.pathname, product.properties.id);
 
-      product.href = url.format(parsed);
+      product.links.push({ rel: ['self'], href: url.format(parsed) });
 
       products.push(product);
     }
 
-    var body = { products: products };
+    var uri = env.argo.uri();
+    var parsed = url.parse(uri);
+    parsed.search = parsed.query = null;
+    parsed.pathname = '/products';
+
+    var body = {
+      class: ['products', 'collection'],
+      entities: products,
+      links: []
+    };
 
     var prevLink, nextLink;
     
@@ -104,17 +117,15 @@ Products.prototype.list = function(env, next) {
       nextLink = { rel: 'next', href: url.format(parsed) };
     }
 
-    if (prevLink || nextLink) {
-      body.links = [];
-
-      if (prevLink) {
-        body.links.push(prevLink);
-      }
-
-      if (nextLink) {
-        body.links.push(nextLink);
-      }
+    if (prevLink) {
+      body.links.push(prevLink);
     }
+
+    if (nextLink) {
+      body.links.push(nextLink);
+    }
+
+    body.links.push({ rel: ['self'], href: uri });
 
     env.response.body = body;
 
@@ -136,10 +147,19 @@ Products.prototype.show = function(env, next) {
       return next(env);
     }
 
+    var uri = env.argo.uri();
+    var parsed = url.parse(uri);
+    parsed.search = parsed.query = null;
+    parsed.pathname = '/products';
+
     var product = {
-      id: entity.get('name'),
-      name: entity.get('productname'),
-      image: entity.get('productimage')
+      class: ['product'],
+      properties: {
+        id: entity.get('name'),
+        name: entity.get('productname'),
+        image: entity.get('productimage')
+      },
+      links: [{ rel: ['collection'], href: url.format(parsed) }]
     };
 
     env.response.body = product;
