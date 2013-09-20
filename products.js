@@ -1,3 +1,4 @@
+var path = require('path');
 var url = require('url');
 var usergrid = require('usergrid');
 
@@ -40,11 +41,20 @@ Products.prototype.list = function(env, next) {
     while (result.hasNextEntity()) {
       var entity = result.getNextEntity();
 
+
       var product = {
         id: entity.get('name'),
         name: entity.get('productname'),
-        image: entity.get('productimage')
+        image: entity.get('productimage'),
+        href: null
       };
+
+      var uri = env.argo.uri();
+      var parsed = url.parse(uri);
+      parsed.search = parsed.query = null;
+      parsed.pathname = path.join(parsed.pathname, product.id);
+
+      product.href = url.format(parsed);
 
       products.push(product);
     }
@@ -56,7 +66,7 @@ Products.prototype.list = function(env, next) {
     if (start && !previous) {
       var uri = env.argo.uri();
       var parsed = url.parse(uri, true);
-      parsed.search = '';
+      parsed.search = null; 
       parsed.query = {};
 
       prevLink = { rel: 'prev', href: url.format(parsed) };
@@ -64,7 +74,7 @@ Products.prototype.list = function(env, next) {
     } else if (previous) {
       var uri = env.argo.uri();
       var parsed = url.parse(uri, true);
-      parsed.search = '';
+      parsed.search = null; 
 
       var p = previous.split('|');
       
