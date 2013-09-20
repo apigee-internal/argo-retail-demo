@@ -29,7 +29,7 @@ Products.prototype.list = function(env, next) {
 
   var options = {
     type: 'products',
-    qs: { limit: 50 }
+    qs: { limit: 20 }
   };
 
   if (start) {
