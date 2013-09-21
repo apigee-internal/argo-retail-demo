@@ -83,7 +83,7 @@ Products.prototype.list = function(env, next) {
       parsed.search = null; 
       parsed.query = {};
 
-      prevLink = { rel: 'prev', href: url.format(parsed) };
+      prevLink = { rel: ['prev'], href: url.format(parsed) };
       
     } else if (previous) {
       var uri = env.argo.uri();
@@ -100,7 +100,7 @@ Products.prototype.list = function(env, next) {
         parsed.query = { start: p[0] };
       }
 
-      prevLink = { rel: 'prev', href: url.format(parsed) };
+      prevLink = { rel: ['prev'], href: url.format(parsed) };
     }
 
     if (result._next) {
@@ -115,7 +115,7 @@ Products.prototype.list = function(env, next) {
         parsed.query.previous = new Buffer(start).toString('base64');
       }
 
-      nextLink = { rel: 'next', href: url.format(parsed) };
+      nextLink = { rel: ['next'], href: url.format(parsed) };
     }
 
     if (prevLink) {
