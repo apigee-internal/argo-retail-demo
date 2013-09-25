@@ -19,21 +19,21 @@ Products.prototype.init = function(config) {
 };
 
 Products.prototype.list = function(env, next) {
-  var start = env.route.query.start;
+  var search;
 
-  var previous = env.route.query.previous;
-
-  if (previous) {
-    previous = new Buffer(previous, 'base64').toString();
+  var query = env.route.query;
+  if (query && query.search) {
+    search = query.search;
   }
 
   var options = {
     type: 'products',
-    qs: { limit: 20 }
+    qs: { limit: 10 }
   };
 
-  if (start) {
-    options.cursor = start;
+  if (search) {
+    options.qs.ql =
+      'select * where productname contains \'' + search + '\'';
   }
 
   this.client.createCollection(options, function(err, result) {
@@ -71,62 +71,24 @@ Products.prototype.list = function(env, next) {
 
     var body = {
       class: ['products'],
+      properties: {},
       entities: products,
-      links: []
+      actions: [],
+      links: [{ rel: ['self'], href: uri }]
     };
 
-    var prevLink, nextLink;
-    
-    if (start && !previous) {
-      var uri = env.argo.uri();
-      var parsed = url.parse(uri, true);
-      parsed.search = null; 
-      parsed.query = {};
-
-      prevLink = { rel: ['prev'], href: url.format(parsed) };
-      
-    } else if (previous) {
-      var uri = env.argo.uri();
-      var parsed = url.parse(uri, true);
-      parsed.search = null; 
-
-      var p = previous.split('|');
-      
-      if (p.length > 1) {
-        var startPrev = p.shift();
-        parsed.query.start = startPrev;
-        parsed.query.previous = new Buffer(p.join('|')).toString('base64');
-      } else {
-        parsed.query = { start: p[0] };
-      }
-
-      prevLink = { rel: ['prev'], href: url.format(parsed) };
+    if (search) {
+      body.class.push('search-results');
+      body.properties.term = search;
+      delete body.actions;
+    } else {
+      delete body.properties;
+      body.actions.push({
+        method: 'GET',
+        href: env.argo.uri(),
+        fields: [{ name: 'search', type: 'text' }]
+      });
     }
-
-    if (result._next) {
-      var uri = env.argo.uri();
-      var parsed = url.parse(uri, true);
-      parsed.search = null;
-      parsed.query.start = result._next;
-
-      if (previous) {
-        parsed.query.previous = new Buffer(start + '|' + previous).toString('base64');
-      } else if (start) {
-        parsed.query.previous = new Buffer(start).toString('base64');
-      }
-
-      nextLink = { rel: ['next'], href: url.format(parsed) };
-    }
-
-    if (prevLink) {
-      body.links.push(prevLink);
-    }
-
-    if (nextLink) {
-      body.links.push(nextLink);
-    }
-
-    body.links.push({ rel: ['self'], href: uri });
 
     env.response.body = body;
 
