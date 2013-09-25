@@ -70,7 +70,7 @@ Products.prototype.list = function(env, next) {
     parsed.pathname = '/products';
 
     var body = {
-      class: ['products', 'collection'],
+      class: ['products'],
       entities: products,
       links: []
     };
