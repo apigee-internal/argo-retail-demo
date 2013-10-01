@@ -22,6 +22,7 @@
     "argo-gzip": "*",
     "argo-url-router": "*",
     "argo-resource": "*",
-    "usergrid": "*"
+    "usergrid": "*",
+    "argo-oauth2-package": "0.0.2"
   }
 }
