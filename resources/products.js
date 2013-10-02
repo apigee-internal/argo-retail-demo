@@ -1,10 +1,8 @@
 var path = require('path');
 var url = require('url');
-var models = require('../models');
-
-var Product = models.response.Product;
-var ProductList = models.response.ProductList
-var ProductListItem = models.response.ProductListItem;
+var Product = require('../models/product');
+var ProductList = require('../models/product_list');
+var ProductListItem = require('../models/product_list_item');
 
 var Products = module.exports = function(repository) {
   this.repository = repository;
@@ -77,7 +75,7 @@ Products.prototype.list = function(env, next) {
 Products.prototype.show = function(env, next) {
   var id = env.route.params.id;
 
-  this.repository.get(id, function(err, result) {
+  this.repository.get(id, function(err, product) {
     if (err) {
       env.response.statusCode = 404;
       return next(env);
@@ -88,10 +86,6 @@ Products.prototype.show = function(env, next) {
     parsed.search = null;
     parsed.pathname = '/products';
 
-    var product = new Product();
-    product.id = result.id;
-    product.name = result.name;
-    product.image = result.image;
     product.selfUrl = uri;
     product.collectionUrl = url.format(parsed);
 

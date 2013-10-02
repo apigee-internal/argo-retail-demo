@@ -1,8 +1,6 @@
 var usergrid = require('usergrid');
-var domain = require('../models').domain;
 var query = require('./query');
-
-var Product = domain.Product;
+var Product = require('../models/product');
 
 var ProductsRepository = module.exports = function() {
   this.client = new usergrid.client({
@@ -41,8 +39,10 @@ ProductsRepository.prototype.find = function(query, cb) {
     while (result.hasNextEntity()) {
       var entity = result.getNextEntity();
 
-      var product = Product.create(entity.get('name'),
-        entity.get('productname'), entity.get('productimage'));
+      var product = new Product();
+      product.id = entity.get('name');
+      product.name = entity.get('productname');
+      product.image = entity.get('productimage');
 
       products.push(product);
     }
@@ -62,8 +62,10 @@ ProductsRepository.prototype.get = function(id, cb) {
     var product;
 
     if (!err) {
-      var product = Product.create(entity.get('name'),
-        entity.get('productname'), entity.get('productimage'));
+      var product = new Product();
+      product.id = entity.get('name');
+      product.name = entity.get('productname');
+      product.image = entity.get('productimage');
     }
 
     cb(err, product);
