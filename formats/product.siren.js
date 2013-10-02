@@ -6,6 +6,9 @@ module.exports = function(model) {
       name: model.name,
       image: model.image
     },
-    links: [{ rel: ['collection'], href: model.collection }]
+    links: [
+      { rel: ['self'], href: model.selfUrl }, 
+      { rel: ['collection'], href: model.collectionUrl }
+    ]
   };
 };

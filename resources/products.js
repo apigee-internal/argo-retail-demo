@@ -86,7 +86,7 @@ Products.prototype.show = function(env, next) {
     product.name = result.name;
     product.image = result.image;
     product.selfUrl = uri;
-    product.collection = url.format(parsed);
+    product.collectionUrl = url.format(parsed);
 
     env.format.render('product', product);
 
