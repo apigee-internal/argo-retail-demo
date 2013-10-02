@@ -1,8 +1,10 @@
 var path = require('path');
 var url = require('url');
-var ProductModel = require('../models/view/product');
-var ProductListModel = require('../models/view/product_list');
-var ProductListItemModel = require('../models/view/product_list_item');
+var models = require('../models');
+
+var Product = models.response.Product;
+var ProductList = models.response.ProductList
+var ProductListItem = models.response.ProductListItem;
 
 var Products = module.exports = function(repository) {
   this.repository = repository;
@@ -47,7 +49,7 @@ Products.prototype.list = function(env, next) {
       parsed.search = null;
       parsed.pathname = path.join(parsed.pathname, product.id);
 
-      var item = new ProductListItemModel();
+      var item = new ProductListItem();
       item.id = product.id;
       item.name = product.name;
       item.image = product.image;
@@ -60,7 +62,7 @@ Products.prototype.list = function(env, next) {
     parsed.search = null;
     parsed.pathname = '/products';
 
-    var list = new ProductListModel();
+    var list = new ProductList();
     list.items = items;
     list.term = term;
     list.searchUrl = url.format(parsed);
@@ -86,7 +88,7 @@ Products.prototype.show = function(env, next) {
     parsed.search = null;
     parsed.pathname = '/products';
 
-    var product = new ProductModel();
+    var product = new Product();
     product.id = result.id;
     product.name = result.name;
     product.image = result.image;

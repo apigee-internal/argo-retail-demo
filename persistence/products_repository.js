@@ -1,6 +1,8 @@
 var usergrid = require('usergrid');
-var Product = require('../models/data/product');
+var domain = require('../models').domain;
 var query = require('./query');
+
+var Product = domain.Product;
 
 var ProductsRepository = module.exports = function() {
   this.client = new usergrid.client({
