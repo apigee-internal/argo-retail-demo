@@ -1,9 +1,11 @@
 var path = require('path');
 var url = require('url');
-var ProductsRepository = require('../data/products_repository');
+var ProductModel = require('../models/view/product');
+var ProductListModel = require('../models/view/product_list');
+var ProductListItemModel = require('../models/view/product_list_item');
 
-var Products = module.exports = function() {
-  this.repository = new ProductsRepository();
+var Products = module.exports = function(repository) {
+  this.repository = repository;
 };
 
 Products.prototype.init = function(config) {
@@ -33,35 +35,33 @@ Products.prototype.list = function(env, next) {
 
   this.repository.find(query, function(err, results) {
     var uri = env.argo.uri();
-    var entities = [];
+    var items = [];
 
     results.forEach(function(product, i) {
       var parsed = url.parse(uri);
       parsed.search = null;
       parsed.pathname = path.join(parsed.pathname, product.id);
 
-      var entity = {
-        product: product,
-        hasNext: (i < (results.length - 1)),
-        self: url.format(parsed)
-      };
+      var item = new ProductListItemModel();
+      item.id = product.id;
+      item.name = product.name;
+      item.image = product.image;
+      item.selfUrl = url.format(parsed);
 
-      entities.push(entity);
+      items.push(item);
     });
 
     var parsed = url.parse(uri);
     parsed.search = null;
     parsed.pathname = '/products';
 
-    var locals = {
-      entities: entities,
-      search: url.format(parsed),
-      self: uri,
-      term: term,
-      hasSearchResults: !!term 
-    };
+    var list = new ProductListModel();
+    list.items = items;
+    list.term = term;
+    list.searchUrl = url.format(parsed);
+    list.selfUrl = uri;
 
-    env.view.render('products', locals);
+    env.format.render('products', list);
 
     next(env);
   });
@@ -81,12 +81,14 @@ Products.prototype.show = function(env, next) {
     parsed.search = parsed.query = null;
     parsed.pathname = '/products';
 
-    var locals = {
-      product: result,
-      collection: url.format(parsed)
-    };
+    var product = new ProductModel();
+    product.id = result.id;
+    product.name = result.name;
+    product.image = result.image;
+    product.selfUrl = uri;
+    product.collection = url.format(parsed);
 
-    env.view.render('product', locals);
+    env.format.render('product', product);
 
     next(env);
   });

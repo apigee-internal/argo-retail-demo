@@ -1,5 +1,5 @@
 var usergrid = require('usergrid');
-var Product = require('../models/product');
+var Product = require('../models/data/product');
 var query = require('./query');
 
 var ProductsRepository = module.exports = function() {
