@@ -13,6 +13,7 @@ Products.prototype.init = function(config) {
     .path('/products')
     .produces('application/json')
     .produces('application/vnd.siren+json')
+    .produces('text/html')
     .get('/', this.list)
     .get('/{id}', this.show);
 };
@@ -25,12 +26,16 @@ Products.prototype.list = function(env, next) {
     term = queryParams.search;
   }
 
-  var query = this.repository.createQuery();
+  var query;
 
   if (term) {
-    query 
+    query = this.repository.createQuery()
+      .select('*')
       .where('name')
       .contains(term);
+  } else {
+    query = this.repository.createQuery()
+      .select('*')
   }
 
   this.repository.find(query, function(err, results) {
@@ -78,7 +83,7 @@ Products.prototype.show = function(env, next) {
 
     var uri = env.argo.uri();
     var parsed = url.parse(uri);
-    parsed.search = parsed.query = null;
+    parsed.search = null;
     parsed.pathname = '/products';
 
     var product = new ProductModel();

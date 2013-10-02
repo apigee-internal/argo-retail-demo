@@ -1,5 +1,6 @@
 var Query = module.exports = function(map) {
   this.current = null;
+  this.fields = [];
   this.filter = [];
   this.map = map || {};
 };
@@ -8,11 +9,21 @@ Query.create = function(map) {
   return new Query(map);
 };
 
-Query.prototype.where = function(field) {
-  if (!this.filter.length) {
-    this.filter.push('where');
+Query.prototype.select = function(fields) {
+  if (!Array.isArray(fields)) {
+    fields = [fields];
   }
 
+  var self = this;
+  fields.forEach(function(field) {
+    field = self.map.hasOwnProperty(field) ? self.map[field] : field;
+    self.fields.push(field);
+  });
+
+  return this;
+};
+
+Query.prototype.where = function(field) {
   field = this.map.hasOwnProperty(field) ? this.map[field] : field;
 
   this.filter.push(field.toString());
@@ -30,8 +41,19 @@ Query.prototype.contains = function(value) {
 };
 
 Query.prototype.toString = function() {
+  var selectString = this.fields.length
+    ? this.fields.join(', ')
+    : '*';
 
-  return 'select * ' + this.filter.join(' ');
+  var filterString = this.filter.join(' ');
+
+  var query = 'select ' + selectString;
+
+  if (filterString.length) {
+    query += ' where ' + filterString;
+  }
+
+  return query;
 };
 
 Query.prototype.escape = function(value) {

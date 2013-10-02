@@ -23,6 +23,7 @@
     "argo-url-router": "*",
     "argo-resource": "*",
     "usergrid": "*",
-    "argo-oauth2-package": "0.0.2"
+    "argo-oauth2-package": "0.0.2",
+    "handlebars": "~1.0.12"
   }
 }
