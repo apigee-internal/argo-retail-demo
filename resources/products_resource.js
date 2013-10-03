@@ -4,11 +4,11 @@ var Product = require('../models/product');
 var ProductList = require('../models/product_list');
 var Query = require('../persistence/orm/query');
 
-var Products = module.exports = function(repository) {
+var ProductsResource = module.exports = function(repository) {
   this.repository = repository;
 };
 
-Products.prototype.init = function(config) {
+ProductsResource.prototype.init = function(config) {
   config
     .path('/products')
     .produces('application/json')
@@ -18,7 +18,7 @@ Products.prototype.init = function(config) {
     .get('/{id}', this.show);
 };
 
-Products.prototype.list = function(env, next) {
+ProductsResource.prototype.list = function(env, next) {
   var term = env.route.query.search;
 
   var query = Query.of(Product);
@@ -58,7 +58,7 @@ Products.prototype.list = function(env, next) {
   });
 };
 
-Products.prototype.show = function(env, next) {
+ProductsResource.prototype.show = function(env, next) {
   var id = env.route.params.id;
 
   this.repository.get(id, function(err, product) {

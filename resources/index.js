@@ -1,12 +1,11 @@
 var resource = require('argo-resource');
+var OrmSession = require('../persistence/orm/session');
 
-var ProductsRepository = require('../persistence/products_repository');
-var Session = require('../persistence/orm/session');
 var ProductMap = require('../persistence/mappings/product_map');
+var ProductsRepository = require('../persistence/products_repository');
+var ProductsResource = require('./products_resource');
 
-var Products = require('./products');
-
-var session = Session.create(function(config) {
+var session = OrmSession.create(function(config) {
   config
     .org(process.env.USERGRID_ORG_NAME || 'cosafinity')
     .app(process.env.USERGRID_APP_NAME || 'sandbox')
@@ -15,4 +14,4 @@ var session = Session.create(function(config) {
 
 var repository = ProductsRepository.create(session);
 
-exports.products = resource(Products, repository);
+exports.products = resource(ProductsResource, repository);
