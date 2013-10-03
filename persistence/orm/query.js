@@ -1,12 +1,12 @@
-var Query = module.exports = function(map) {
-  this.current = null;
+var Query = module.exports = function(modelConfig) {
+  this.modelConfig = modelConfig;
   this.fields = [];
   this.filter = [];
-  this.map = map || {};
 };
 
-Query.create = function(map) {
-  return new Query(map);
+Query.of = function(constructor) {
+  var query = new Query(constructor.__orm_model_config__); 
+  return query;
 };
 
 Query.prototype.select = function(fields) {
@@ -16,26 +16,30 @@ Query.prototype.select = function(fields) {
 
   var self = this;
   fields.forEach(function(field) {
-    field = self.map.hasOwnProperty(field) ? self.map[field] : field;
+    field = self.modelConfig.fieldMap.hasOwnProperty(field)
+              ? self.modelConfig.fieldMap[field]
+              : field;
+
     self.fields.push(field);
   });
 
   return this;
 };
 
-Query.prototype.where = function(field) {
-  field = this.map.hasOwnProperty(field) ? this.map[field] : field;
+Query.prototype.where = function(field, filter) {
+  field = this.modelConfig.fieldMap.hasOwnProperty(field)
+            ? this.modelConfig.fieldMap[field]
+            : field;
 
   this.filter.push(field.toString());
 
-  return this;
-};
-
-Query.prototype.contains = function(value) {
-  value = this.escape(value);
-
-  this.filter.push('contains');
-  this.filter.push(value);
+  var self = this;
+  Object.keys(filter).forEach(function(key) {
+    if (key === 'contains') {
+      self.filter.push('contains');
+      self.filter.push(self.escape(filter[key]));
+    }
+  });
 
   return this;
 };

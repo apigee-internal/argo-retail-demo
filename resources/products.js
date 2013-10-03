@@ -2,7 +2,7 @@ var path = require('path');
 var url = require('url');
 var Product = require('../models/product');
 var ProductList = require('../models/product_list');
-var ProductListItem = require('../models/product_list_item');
+var Query = require('../persistence/orm/query');
 
 var Products = module.exports = function(repository) {
   this.repository = repository;
@@ -19,41 +19,27 @@ Products.prototype.init = function(config) {
 };
 
 Products.prototype.list = function(env, next) {
-  var term;
+  var term = env.route.query.search;
 
-  var queryParams = env.route.query;
-  if (queryParams && queryParams.search) {
-    term = queryParams.search;
-  }
-
-  var query;
+  var query = Query.of(Product);
 
   if (term) {
-    query = this.repository.createQuery()
-      .select('*')
-      .where('name')
-      .contains(term);
-  } else {
-    query = this.repository.createQuery()
-      .select('*')
+    query
+      .where('name', { contains: term })
   }
 
   this.repository.find(query, function(err, results) {
     var uri = env.argo.uri();
     var items = [];
 
-    results.forEach(function(product, i) {
+    results.forEach(function(product) {
       var parsed = url.parse(uri);
       parsed.search = null;
       parsed.pathname = path.join(parsed.pathname, product.id);
 
-      var item = new ProductListItem();
-      item.id = product.id;
-      item.name = product.name;
-      item.image = product.image;
-      item.selfUrl = url.format(parsed);
+      product.selfUrl = url.format(parsed);
 
-      items.push(item);
+      items.push(product);
     });
 
     var parsed = url.parse(uri);
