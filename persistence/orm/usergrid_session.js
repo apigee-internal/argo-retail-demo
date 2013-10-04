@@ -2,7 +2,12 @@ var usergrid = require('usergrid');
 var ConstructorMap = require('./constructor_map');
 var SessionConfig = require('./session_config');
 
-var Session = module.exports = function() {
+var Session = module.exports = function(options) {
+  options = options || {};
+
+  this.org = options.org;
+  this.app = options.app;
+
   this.config = null;
   this.client = null;
 };
@@ -10,8 +15,8 @@ var Session = module.exports = function() {
 Session.prototype.init = function(config) {
   this.config = config;
   this.client = new usergrid.client({
-    orgName: this.config.organization,
-    appName: this.config.application
+    orgName: this.org,
+    appName: this.app
   }); 
 };
 
@@ -73,8 +78,8 @@ Session.prototype.get = function(query, id, cb) {
   });
 };
 
-Session.create = function(configFunc) {
-  var session = new Session();
+Session.create = function(options, configFunc) {
+  var session = new Session(options);
   var config = new SessionConfig(session);
 
   configFunc(config);

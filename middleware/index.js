@@ -4,13 +4,15 @@ var cors = require('./cors');
 var formatter = require('./formatter');
 var handlebars = require('./formatters/handlebars');
 var siren = require('./formatters/siren');
+var url = require('./url');
 
 exports.cors = cors;
 exports.gzip = gzip;
-exports.router = router;
 exports.formatter = formatter({
   engines: [handlebars, siren],
   override: {
     'application/json': siren
   }
 });
+exports.router = router;
+exports.url = url;

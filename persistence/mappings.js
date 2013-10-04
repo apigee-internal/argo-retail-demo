@@ -1,7 +1,7 @@
-var Product = require('../../models/product');
+var Product = require('../models/product');
 
-module.exports = function(config) {
-  config
+module.exports = function(mapping) {
+  mapping
     .of(Product)
     .at('products')
     .map('id', { to: 'name' })

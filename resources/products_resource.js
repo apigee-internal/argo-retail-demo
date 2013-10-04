@@ -1,5 +1,3 @@
-var path = require('path');
-var url = require('url');
 var Product = require('../models/product');
 var ProductList = require('../models/product_list');
 var Query = require('../persistence/orm/query');
@@ -20,7 +18,6 @@ ProductsResource.prototype.init = function(config) {
 
 ProductsResource.prototype.list = function(env, next) {
   var term = env.route.query.search;
-
   var query = Query.of(Product);
 
   if (term) {
@@ -29,28 +26,20 @@ ProductsResource.prototype.list = function(env, next) {
   }
 
   this.repository.find(query, function(err, results) {
-    var uri = env.argo.uri();
     var items = [];
+    var urlHelper = env.helpers.url;
 
     results.forEach(function(product) {
-      var parsed = url.parse(uri);
-      parsed.search = null;
-      parsed.pathname = path.join(parsed.pathname, product.id);
-
-      product.selfUrl = url.format(parsed);
+      product.selfUrl = urlHelper.join(product.id);
 
       items.push(product);
     });
 
-    var parsed = url.parse(uri);
-    parsed.search = null;
-    parsed.pathname = '/products';
-
     var list = new ProductList();
     list.items = items;
     list.term = term;
-    list.searchUrl = url.format(parsed);
-    list.selfUrl = uri;
+    list.searchUrl = urlHelper.path('/products');
+    list.selfUrl = urlHelper.current();
 
     env.format.render('products', list);
 
@@ -60,6 +49,7 @@ ProductsResource.prototype.list = function(env, next) {
 
 ProductsResource.prototype.show = function(env, next) {
   var id = env.route.params.id;
+  var urlHelper = env.helpers.url;
 
   this.repository.get(id, function(err, product) {
     if (err) {
@@ -67,13 +57,8 @@ ProductsResource.prototype.show = function(env, next) {
       return next(env);
     }
 
-    var uri = env.argo.uri();
-    var parsed = url.parse(uri);
-    parsed.search = null;
-    parsed.pathname = '/products';
-
-    product.selfUrl = uri;
-    product.collectionUrl = url.format(parsed);
+    product.selfUrl = urlHelper.current();
+    product.collectionUrl = urlHelper.path('/products');
 
     env.format.render('product', product);
 
