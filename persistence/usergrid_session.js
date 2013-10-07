@@ -1,6 +1,6 @@
 var usergrid = require('usergrid');
-var ConstructorMap = require('./constructor_map');
-var SessionConfig = require('./session_config');
+var ConstructorMap = require('./orm/constructor_map');
+var SessionConfig = require('./orm/session_config');
 
 var Session = module.exports = function(options) {
   options = options || {};
