@@ -26,13 +26,11 @@ ProductsResource.prototype.list = function(env, next) {
   }
 
   this.repository.find(query, function(err, results) {
-    var items = [];
     var urlHelper = env.helpers.url;
 
-    results.forEach(function(product) {
+    var items = results.map(function(product) {
       product.selfUrl = urlHelper.join(product.id);
-
-      items.push(product);
+      return product;
     });
 
     var list = ProductList.create({
