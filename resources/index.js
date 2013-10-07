@@ -1,16 +1,15 @@
 var resource = require('argo-resource');
 var mappings = require('../persistence/mappings');
-var ProductsRepository = require('../persistence/products_repository');
+var Product = require('../models/product');
 var ProductsResource = require('./products_resource');
-var Session = require('../persistence/orm/usergrid_session');
+var RepositoryFactory = require('../persistence/repository_factory');
+var SessionFactory = require('../persistence/session_factory');
 
-var opts = {
-  org: process.env.USERGRID_ORG_NAME || 'cosafinity',
-  app: process.env.USERGRID_APP_NAME || 'sandbox'
-};
+var session = SessionFactory.create(function(config) {
+  config.add(mappings);
+});
 
-var session = Session.create(opts, function(config) { config.add(mappings); });
+var factory = RepositoryFactory.create(session);
+var productsRepository = factory.of(Product);
 
-var repository = ProductsRepository.create(session);
-
-exports.products = resource(ProductsResource, repository);
+exports.products = resource(ProductsResource, productsRepository);

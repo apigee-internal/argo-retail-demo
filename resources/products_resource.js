@@ -19,7 +19,7 @@ ProductsResource.prototype.init = function(config) {
 ProductsResource.prototype.list = function(env, next) {
   var term = env.route.query.search;
   var query = Query.of(Product);
-
+  
   if (term) {
     query
       .where('name', { contains: term })
@@ -35,11 +35,12 @@ ProductsResource.prototype.list = function(env, next) {
       items.push(product);
     });
 
-    var list = new ProductList();
-    list.items = items;
-    list.term = term;
-    list.searchUrl = urlHelper.path('/products');
-    list.selfUrl = urlHelper.current();
+    var list = ProductList.create({
+      items: items,
+      term: term,
+      searchUrl: urlHelper.path('/products'),
+      selfUrl: urlHelper.current()
+    });
 
     env.format.render('products', list);
 
