@@ -1,5 +1,5 @@
 var resource = require('argo-resource');
-var mullet = require('mullet');
+var calypso = require('calypso');
 var mappings = require('../persistence/mappings');
 var Product = require('../models/product');
 var ProductsResource = require('./products_resource');
@@ -9,11 +9,11 @@ var options = {
   app: process.env.USERGRID_APP_NAME || 'sandbox'
 };
 
-var session = mullet.UsergridSession.create(options, function(config) {
+var session = calypso.UsergridSession.create(options, function(config) {
   config.add(mappings);
 });
 
-var factory = mullet.RepositoryFactory.create(session);
+var factory = calypso.RepositoryFactory.create(session);
 
 var productsRepository = factory.of(Product);
 

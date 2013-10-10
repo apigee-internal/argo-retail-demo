@@ -1,6 +1,6 @@
 var Product = require('../models/product');
 var ProductList = require('../models/product_list');
-var Query = require('mullet').Query;
+var Query = require('calypso').Query;
 
 var ProductsResource = module.exports = function(repository) {
   this.repository = repository;
