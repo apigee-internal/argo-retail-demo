@@ -2,22 +2,14 @@ var Product = require('../models/product');
 var ProductList = require('../models/product_list');
 var Query = require('calypso').Query;
 
-var ProductsResource = module.exports = function(repository) {
+var ProductsResource = module.exports = function(repository, paths) {
   this.repository = repository;
-};
-
-ProductsResource.prototype.init = function(config) {
-  config
-    .path('/products')
-    .produces('application/json')
-    .produces('application/vnd.siren+json')
-    .produces('text/html')
-    .get('/', this.list)
-    .get('/{id}', this.show);
+  this.paths = paths;
 };
 
 ProductsResource.prototype.list = function(env, next) {
   var term = env.route.query.search;
+  var productsPath = this.paths.products;
   var query = Query.of(Product);
   
   if (term) {
@@ -36,7 +28,7 @@ ProductsResource.prototype.list = function(env, next) {
     var list = ProductList.create({
       items: items,
       term: term,
-      searchUrl: urlHelper.path('/products'),
+      searchUrl: urlHelper.path(productsPath),
       selfUrl: urlHelper.current()
     });
 
@@ -50,6 +42,8 @@ ProductsResource.prototype.show = function(env, next) {
   var id = env.route.params.id;
   var urlHelper = env.helpers.url;
 
+  var productsPath = this.paths.products;
+
   this.repository.get(id, function(err, product) {
     if (err) {
       env.response.statusCode = 404;
@@ -57,7 +51,7 @@ ProductsResource.prototype.show = function(env, next) {
     }
 
     product.selfUrl = urlHelper.current();
-    product.collectionUrl = urlHelper.path('/products');
+    product.collectionUrl = urlHelper.path(productsPath);
 
     env.format.render('product', product);
 

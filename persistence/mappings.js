@@ -1,6 +1,6 @@
 var Product = require('../models/product');
 
-module.exports = function(mapping) {
+var companyMapping = function(mapping) {
   mapping
     .of(Product)
     .at('products')
@@ -8,3 +8,5 @@ module.exports = function(mapping) {
     .map('name', { to: 'productname' })
     .map('image', { to: 'productimage' });
 };
+
+module.exports = [companyMapping];

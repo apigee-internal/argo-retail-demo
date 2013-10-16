@@ -1,14 +1,16 @@
 var argo = require('argo');
 var middleware = require('./middleware');
-var resources = require('./resources');
+var setup = require('./setup');
 
 var port = process.env.PORT || 3000;
 
-argo()
-  .use(middleware.cors)
-  .use(middleware.gzip)
-  .use(middleware.router)
-  .use(middleware.formatter)
-  .use(middleware.url)
-  .use(resources.products)
-  .listen(port);
+setup(function(err, resources) {
+  argo()
+    .use(middleware.cors)
+    .use(middleware.gzip)
+    .use(middleware.router)
+    .use(middleware.formatter)
+    .use(middleware.url)
+    .use(resources.products)
+    .listen(port);
+});
