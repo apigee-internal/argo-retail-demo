@@ -4,6 +4,7 @@ var UsergridDriver = require('calypso-usergrid');
 var mappings = require('./persistence/mappings');
 var Product = require('./models/product');
 var ProductsResource = require('./resources/products_resource');
+var RepositoryFactory = calypso.RepositoryFactory;
 
 var paths = {
   products: '/products'
@@ -35,7 +36,7 @@ module.exports = function(cb) {
 
     var session = connection.createSession();
 
-    var factory = calypso.RepositoryFactory.create(session);
+    var factory = RepositoryFactory.create(session);
     var productsRepository = factory.of(Product);
 
     var resources = {

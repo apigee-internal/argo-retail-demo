@@ -1,9 +1,9 @@
+var formatter = require('argo-formatter');
+var handlebars = require('argo-formatter-handlebars');
 var gzip = require('argo-gzip');
 var router = require('argo-url-router');
+var siren = require('argo-formatter-siren');
 var cors = require('./cors');
-var formatter = require('./formatter');
-var handlebars = require('./formatters/handlebars');
-var siren = require('./formatters/siren');
 var url = require('./url');
 
 exports.cors = cors;

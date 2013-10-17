@@ -26,6 +26,9 @@
     "argo-oauth2-package": "*",
     "handlebars": "~1.0.12",
     "calypso": "*",
-    "calypso-usergrid": "*"
+    "calypso-usergrid": "*",
+    "argo-formatter": "0.0.0",
+    "argo-formatter-siren": "0.0.0",
+    "argo-formatter-handlebars": "0.0.0"
   }
 }
