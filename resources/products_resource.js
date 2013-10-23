@@ -7,6 +7,16 @@ var ProductsResource = module.exports = function(repository, paths) {
   this.paths = paths;
 };
 
+ProductsResource.prototype.init = function(config) {
+  config
+    .path(this.paths.products)
+    .produces('application/json')
+    .produces('application/vnd.siren+json')
+    .produces('text/html')
+    .get('/', this.list)
+    .get('/{id}', this.show);
+};
+
 ProductsResource.prototype.list = function(env, next) {
   var term = env.route.query.search;
   var productsPath = this.paths.products;

@@ -1,24 +1,9 @@
 var calypso = require('calypso');
-var resource = require('argo-resource');
 var UsergridDriver = require('calypso-usergrid');
 var mappings = require('./persistence/mappings');
 var Product = require('./models/product');
 var ProductsResource = require('./resources/products_resource');
 var RepositoryFactory = calypso.RepositoryFactory;
-
-var paths = {
-  products: '/products'
-};
-
-ProductsResource.prototype.init = function(config) {
-  config
-    .path(paths.products)
-    .produces('application/json')
-    .produces('application/vnd.siren+json')
-    .produces('text/html')
-    .get('/', this.list)
-    .get('/{id}', this.show);
-};
 
 var engine = calypso.configure({
   driver: new UsergridDriver({
@@ -28,7 +13,7 @@ var engine = calypso.configure({
   mappings: mappings
 });
 
-module.exports = function(cb) {
+module.exports = function(server, cb) {
   engine.build(function(err, connection) {
     if (err) {
       return cb(err);
@@ -39,11 +24,12 @@ module.exports = function(cb) {
     var factory = RepositoryFactory.create(session);
     var productsRepository = factory.of(Product);
 
-    var resources = {
-      products: resource(ProductsResource, productsRepository, paths)
+    var paths = {
+      products: '/products'
     };
 
-    cb(null, resources);
+    server.add(ProductsResource, productsRepository, paths);
+
+    cb(null);
   });
 };
-
