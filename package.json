@@ -18,14 +18,12 @@
     "url": "https://github.com/kevinswiber/argo-retail-demo/issues"
   },
   "dependencies": {
-    "argo-gzip": "*",
-    "usergrid": "*",
-    "handlebars": "~1.0.12",
+    "argo-formatter-handlebars": "0.0.0",
+    "argo-formatter-siren": "0.0.0",
     "calypso": "*",
     "calypso-usergrid": "*",
-    "argo-formatter-siren": "0.0.0",
-    "argo-formatter-handlebars": "0.0.0",
+    "iv": "0.0.1",
     "titan": "0.0.0",
-    "iv": "0.0.1"
+    "usergrid": "*"
   }
 }
