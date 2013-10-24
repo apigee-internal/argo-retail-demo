@@ -1,15 +1,13 @@
+var titan = require('titan');
 var handlebars = require('argo-formatter-handlebars');
 var siren = require('argo-formatter-siren');
-var titan = require('titan');
-var middleware = require('./middleware');
+var cors = require('./middleware/cors');
 var setup = require('./setup');
 
 var port = process.env.PORT || 3000;
 
 var server = titan()
-  .use(middleware.cors)
-  .use(middleware.gzip)
-  .use(middleware.url)
+  .use(cors)
   .format({
     engines: [handlebars, siren],
     override: {
