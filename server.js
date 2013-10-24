@@ -9,12 +9,13 @@ setup(function(err, container) {
 
   titan()
     .allow('*')
-    .load(factory)
+    .compress()
     .format({
       engines: [handlebars, siren],
       override: {
         'application/json': siren
       }
     })
+    .load(factory)
     .listen(port);
 });
