@@ -25,6 +25,7 @@
     "calypso-usergrid": "*",
     "argo-formatter-siren": "0.0.0",
     "argo-formatter-handlebars": "0.0.0",
-    "titan": "0.0.0"
+    "titan": "0.0.0",
+    "iv": "0.0.1"
   }
 }

@@ -1,4 +1,5 @@
 var calypso = require('calypso');
+var iv = require('iv');
 var UsergridDriver = require('calypso-usergrid');
 var mappings = require('./persistence/mappings');
 var Product = require('./models/product');
@@ -27,6 +28,24 @@ module.exports = function(server, cb) {
     var paths = {
       products: '/products'
     };
+
+    var container = iv.create();
+    var value = container.value;
+    var component = container.component;
+
+    container.register([{
+      name: 'repository:products',
+      value: value(productsRepository)
+    },
+    {
+      name: 'paths',
+      value: value(paths)
+    },
+    {
+      name: 'resource:products',
+      value: ProductsResource,
+      params: [component('repository:products'), component('paths')]
+    }]);
 
     server.add(ProductsResource, productsRepository, paths);
 
