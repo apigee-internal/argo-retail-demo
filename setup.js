@@ -30,8 +30,6 @@ module.exports = function(cb) {
     };
 
     var container = iv.create();
-    var value = container.value;
-    var component = container.component;
 
     container.register([{
       name: 'resource:products',

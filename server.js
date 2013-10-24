@@ -1,17 +1,15 @@
 var titan = require('titan');
-var ResourceFactory = titan.ContainerResourceFactory;
 var handlebars = require('argo-formatter-handlebars');
 var siren = require('argo-formatter-siren');
-var cors = require('./middleware/cors');
 var setup = require('./setup');
 
-var port = process.env.PORT || 3000;
-
-
 setup(function(err, container) {
+  var port = process.env.PORT || 3000;
+  var factory = titan.ContainerResourceFactory.create(container);
+
   titan()
-    .use(cors)
-    .setResourceFactory(ResourceFactory.create(container))
+    .allow('*')
+    .load(factory)
     .format({
       engines: [handlebars, siren],
       override: {
