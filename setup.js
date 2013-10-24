@@ -14,7 +14,7 @@ var engine = calypso.configure({
   mappings: mappings
 });
 
-module.exports = function(server, cb) {
+module.exports = function(cb) {
   engine.build(function(err, connection) {
     if (err) {
       return cb(err);
@@ -34,21 +34,11 @@ module.exports = function(server, cb) {
     var component = container.component;
 
     container.register([{
-      name: 'repository:products',
-      value: value(productsRepository)
-    },
-    {
-      name: 'paths',
-      value: value(paths)
-    },
-    {
       name: 'resource:products',
       value: ProductsResource,
-      params: [component('repository:products'), component('paths')]
+      params: [productsRepository, paths]
     }]);
 
-    server.add(ProductsResource, productsRepository, paths);
-
-    cb(null);
+    cb(null, container);
   });
 };
