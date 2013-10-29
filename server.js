@@ -2,14 +2,14 @@ var http = require('http');
 var titan = require('titan');
 var siren = require('argo-formatter-siren');
 var ApigeeRuntime = require('volos/oauth/providers/apigee');
-//var OAuth = require('volos/oauth');
-//var config = require('./config');
+var OAuth = require('volos/oauth');
+var config = require('./config');
 var ResourceFactory = titan.ContainerResourceFactory;
 
 module.exports = function(container) {
   var app = titan();
 
-  /*var runtime = new ApigeeRuntime(config);
+  var runtime = new ApigeeRuntime(config);
   var options = {
     validGrantTypes: ['client_credentials'],
     passwordCheck: function() { return true; }
@@ -21,7 +21,7 @@ module.exports = function(container) {
     accessTokenUri: '/accesstoken'
   });
 
-  app.use(oauth);*/
+  app.use(oauth);
   app.allow('*');
   app.compress();
   app.logger();
@@ -33,22 +33,15 @@ module.exports = function(container) {
     }
   });
 
-  /*app.use(function(handler) {
+  app.use(function(handler) {
+    handler('resource:request:before', oauth.authenticate.bind(oauth));
     handler('resource:request:before', function(env, next) {
-      console.log(env.response.statusCode);
-      if (env._oauthAuthenticated === false ||
-          [400, 500].indexOf(env.response.statusCode) !== -1) {
-        console.log(env.response.statusCode);
-
+      if (env.oauth.error) {
         env.resource.skip(true);
-        console.log('skipping resource');
-      } else {
-        console.log('executing resource');
       }
-
       next(env);
     });
-  });*/
+  });
 
   app.load(ResourceFactory.create(container));
 
