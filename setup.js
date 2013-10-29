@@ -8,8 +8,8 @@ var RepositoryFactory = calypso.RepositoryFactory;
 
 var engine = calypso.configure({
   driver: new UsergridDriver({
-    orgName: 'cosafinity',
-    appName: 'sandbox'
+    orgName: 'volos',
+    appName: 'retail'
   }),
   mappings: mappings
 });
