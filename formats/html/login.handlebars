@@ -1,0 +1,73 @@
+         <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        
+        <script src="https://s3.amazonaws.com/codiqa-cdn/jquery-1.7.2.min.js">
+        </script>
+        <script src="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.js">
+        </script>
+        <!-- User-generated css -->
+        <style>
+        </style>
+        <!-- User-generated js -->
+        <script>
+        window.resizeTo(398, 496);
+            try {
+
+    $(function() {
+
+    });
+
+  } catch (error) {
+    console.error("Your javascript has an error: " + error);
+  }
+        </script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="page1">
+            <div data-theme="b" data-role="header">
+                <h3>
+                    End User Login
+                </h3>
+                <div style=" text-align:center">
+                    <img style="width: 119px; height: 41px" src="http://cosafinity.apiportal.apigee.com/sites/prod-cosafinity/files/cosafinity_Transparant.png">
+                </div>
+            </div>
+            <div data-role="content">
+                <form data-ajax="false" action="{{ url }}" method="POST">
+                    <input type="hidden" name="client_id" value="{{ clientId }}" />
+                    <input type="hidden" name="response_type" value="{{ responseType }}" />
+                    <input type="hidden" name="scope" value="{{ scope }}" />
+                    <input type="hidden" name="state" value="{{ state }}" />
+                    <input type="hidden" name="redirect_uri" value="{{ redirectUri }}" />
+                    <div data-role="fieldcontain">
+                        <label for="username">
+                            Login
+                        </label>
+                        <input name="username" id="username" placeholder="" value="" type="text" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="password">
+                            Password
+                        </label>
+                        <input name="password" id="password" placeholder="" value="" type="password" />
+                    </div>
+                    <td></td>
+                     <input id="submit" name="Login" type="submit" data-theme="b" data-icon="star" data-iconpos="left" value="Submit" />
+                    <a data-role="button" target="new" data-theme="b" href="http://localhost:8080/examples/jsp/etelco/" data-icon="info" data-iconpos="left">
+                        Sign Up
+                    </a>
+                </form>
+            </div>
+            <div data-theme="a" data-role="header"></div>
+        </div>
+    </body>
+</html>

@@ -1,5 +1,6 @@
 var http = require('http');
 var titan = require('titan');
+var handlebars = require('argo-formatter-handlebars');
 var siren = require('argo-formatter-siren');
 var ApigeeRuntime = require('volos/oauth/providers/apigee');
 var OAuth = require('volos/oauth');
@@ -11,13 +12,12 @@ module.exports = function(container) {
 
   var runtime = new ApigeeRuntime(config);
   var options = {
-    validGrantTypes: ['client_credentials'],
-    passwordCheck: function() { return true; }
+    validGrantTypes: ['client_credentials', 'authorization_code']
   };
 
   var oauthFactory = new OAuth(runtime, options);
   var oauth = oauthFactory.argoMiddleware({
-    authorizeUri: '/authorize',
+    authorizeUri: '/__authorize',
     accessTokenUri: '/accesstoken'
   });
 
@@ -27,14 +27,21 @@ module.exports = function(container) {
   app.logger();
 
   app.format({
-    engines: [siren],
+    engines: [siren, handlebars],
     override: {
       'application/json': siren
     }
   });
 
   app.use(function(handler) {
-    handler('resource:request:before', oauth.authenticate.bind(oauth));
+    handler('resource:request:before', function(env, next) {
+      if (env.resource.current.public) {
+        return next(env);
+      };
+
+      env.oauth.authenticate(env, next);
+    });
+
     handler('resource:request:before', function(env, next) {
       if (env.oauth.error) {
         env.resource.skip(true);

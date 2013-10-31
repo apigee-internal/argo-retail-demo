@@ -24,6 +24,7 @@
     "calypso-usergrid": "*",
     "iv": "0.0.1",
     "titan": "0.0.0",
-    "usergrid": "*"
+    "usergrid": "*",
+    "request": "~2.27.0"
   }
 }

@@ -3,6 +3,7 @@ var iv = require('iv');
 var UsergridDriver = require('calypso-usergrid');
 var mappings = require('./persistence/mappings');
 var Product = require('./models/product');
+var LoginResource = require('./resources/login_resource');
 var ProductsResource = require('./resources/products_resource');
 var RepositoryFactory = calypso.RepositoryFactory;
 
@@ -26,7 +27,8 @@ module.exports = function(cb) {
     var productsRepository = factory.of(Product);
 
     var paths = {
-      products: '/products'
+      products: '/products',
+      login: '/authorize'
     };
 
     var container = iv.create();
@@ -35,6 +37,10 @@ module.exports = function(cb) {
       name: 'resource:products',
       value: ProductsResource,
       params: [productsRepository, paths]
+    }, {
+      name: 'resource:login',
+      value: LoginResource,
+      params: [paths]
     }]);
 
     cb(null, container);
