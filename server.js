@@ -12,12 +12,11 @@ module.exports = function(container) {
 
   var runtime = new ApigeeRuntime(config);
   var options = {
-    validGrantTypes: ['client_credentials', 'authorization_code']
+    validGrantTypes: ['authorization_code']
   };
 
   var oauthFactory = new OAuth(runtime, options);
   var oauth = oauthFactory.argoMiddleware({
-    authorizeUri: '/__authorize',
     accessTokenUri: '/accesstoken'
   });
 
