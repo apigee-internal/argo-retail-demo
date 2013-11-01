@@ -12,7 +12,6 @@ ProductsResource.prototype.init = function(config) {
     .path(this.paths.products)
     .produces('application/json')
     .produces('application/vnd.siren+json')
-    .produces('text/html')
     .get('/', this.list)
     .get('/{id}', this.show);
 };

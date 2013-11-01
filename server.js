@@ -38,11 +38,12 @@ module.exports = function(container) {
         return next(env);
       };
 
+      next(env);
       env.oauth.authenticate(env, next);
     });
 
     handler('resource:request:before', function(env, next) {
-      if (env.oauth.error) {
+      if (env.oauth && env.oauth.error) {
         env.resource.skip(true);
       }
       next(env);
