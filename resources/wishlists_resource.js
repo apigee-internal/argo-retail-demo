@@ -5,12 +5,13 @@ var ug = require('usergrid'),
       appName:"retail",
       authType:ug.AUTH_APP_USER
     });
-var WishlistResource = module.exports = function() {
-
+var WishlistResource = module.exports = function(paths) {
+  this.paths = paths;
 }
 
 WishlistResource.prototype.init = function(config) {
   config
+    .path(this.paths.users)
     .produces('application/json')
     .get('/{user}/lists/{name}/products', this.getList)
     .post('/{user}/lists/{name}/products/{product}', this.addToList);

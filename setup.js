@@ -29,7 +29,8 @@ module.exports = function(cb) {
 
     var paths = {
       products: '/products',
-      login: '/authorize'
+      login: '/authorize',
+      users: '/users'
     };
 
     var container = iv.create();
@@ -47,7 +48,7 @@ module.exports = function(cb) {
     {
       name: 'resource:wishlists',
       value: WishlistResource,
-      params: []
+      params: [paths]
     }]);
 
     cb(null, container);
