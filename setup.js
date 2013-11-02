@@ -5,6 +5,7 @@ var mappings = require('./persistence/mappings');
 var Product = require('./models/product');
 var LoginResource = require('./resources/login_resource');
 var ProductsResource = require('./resources/products_resource');
+var WishlistResource = require('./resources/wishlists_resource');
 var RepositoryFactory = calypso.RepositoryFactory;
 
 var engine = calypso.configure({
@@ -37,10 +38,16 @@ module.exports = function(cb) {
       name: 'resource:products',
       value: ProductsResource,
       params: [productsRepository, paths]
-    }, {
+    },
+    {
       name: 'resource:login',
       value: LoginResource,
       params: [paths]
+    },
+    {
+      name: 'resource:wishlists',
+      value: WishlistResource,
+      params: []
     }]);
 
     cb(null, container);
