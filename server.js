@@ -10,20 +10,35 @@ var ResourceFactory = titan.ContainerResourceFactory;
 module.exports = function(container) {
   var app = titan();
 
-  //var runtime = ApigeeRuntime.create(config);
-  //var options = {
-    //validGrantTypes: ['authorization_code']
-  //};
+  if (process.env.USE_OAUTH) {
+    config.validGrantTypes = ['authorization_code'];
 
-  config.validGrantTypes = ['authorization_code'];
+    var oauthFactory = ApigeeRuntime.create(config);
+    var oauth = oauthFactory.argoMiddleware({
+      accessTokenUri: '/accesstoken'
+    });
 
-  //var oauthFactory = new OAuth(runtime, options);
-  var oauthFactory = ApigeeRuntime.create(config);
-  var oauth = oauthFactory.argoMiddleware({
-    accessTokenUri: '/accesstoken'
-  });
+    app.use(oauth);
 
-  app.use(oauth);
+    app.use(function(handler) {
+      handler('resource:request:before', function(env, next) {
+        if (env.resource.current.public) {
+          return next(env);
+        };
+
+        next(env);
+        env.oauth.authenticate(env, next);
+      });
+
+      handler('resource:request:before', function(env, next) {
+        if (env.oauth && env.oauth.error) {
+          env.resource.skip(true);
+        }
+        next(env);
+      });
+    });
+  }
+
   app.allow('*');
   app.compress();
   app.logger();
@@ -35,23 +50,6 @@ module.exports = function(container) {
     }
   });
 
-  app.use(function(handler) {
-    handler('resource:request:before', function(env, next) {
-      if (env.resource.current.public) {
-        return next(env);
-      };
-
-      next(env);
-      env.oauth.authenticate(env, next);
-    });
-
-    handler('resource:request:before', function(env, next) {
-      if (env.oauth && env.oauth.error) {
-        env.resource.skip(true);
-      }
-      next(env);
-    });
-  });
 
   app.load(ResourceFactory.create(container));
 
