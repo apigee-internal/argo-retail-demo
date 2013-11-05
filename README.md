@@ -1,5 +1,9 @@
 # argo-retail-demo
 
+This demo shows an API built on modules from the [Argo project](https://github.com/argo).
+
+A hosted version of this demo is available here: http://argo-retail-demo.herokuapp.com
+
 ## Setup
 
 ```bash
@@ -18,8 +22,11 @@ $ node server.js
 
 ```bash
 $ curl -i http://localhost:3000/products
-$ curl -i http://localhost:3000/products/helmet
 ```
+
+You can alternatively use the Siren API browser to navigate the API:
+
+http://siren-api-browser.herokuapp.com/
 
 ## License
 
