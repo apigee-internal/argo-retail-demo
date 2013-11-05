@@ -2,20 +2,23 @@ var http = require('http');
 var titan = require('titan');
 var handlebars = require('argo-formatter-handlebars');
 var siren = require('argo-formatter-siren');
-var ApigeeRuntime = require('volos/oauth/providers/apigee');
-var OAuth = require('volos/oauth');
+var ApigeeRuntime = require('volos-oauth-apigee');
+var OAuth = require('volos-oauth-common');
 var config = require('./config');
 var ResourceFactory = titan.ContainerResourceFactory;
 
 module.exports = function(container) {
   var app = titan();
 
-  var runtime = new ApigeeRuntime(config);
-  var options = {
-    validGrantTypes: ['authorization_code']
-  };
+  //var runtime = ApigeeRuntime.create(config);
+  //var options = {
+    //validGrantTypes: ['authorization_code']
+  //};
 
-  var oauthFactory = new OAuth(runtime, options);
+  config.validGrantTypes = ['authorization_code'];
+
+  //var oauthFactory = new OAuth(runtime, options);
+  var oauthFactory = ApigeeRuntime.create(config);
   var oauth = oauthFactory.argoMiddleware({
     accessTokenUri: '/accesstoken'
   });

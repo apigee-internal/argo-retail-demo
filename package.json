@@ -25,6 +25,8 @@
     "iv": "0.0.1",
     "titan": "0.0.0",
     "usergrid": "*",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "volos-oauth-common": "0.0.1",
+    "volos-oauth-apigee": "0.0.1"
   }
 }
