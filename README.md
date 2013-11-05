@@ -2,7 +2,7 @@
 
 This demo shows an API built on modules from the [Argo project](https://github.com/argo).
 
-A hosted version of this demo is available here: http://argo-retail-demo.herokuapp.com
+A hosted version of this demo is available here: http://argo-retail-demo.herokuapp.com/products
 
 ## Setup
 
