@@ -7,7 +7,7 @@ A hosted version of this demo is available here: http://argo-retail-demo.herokua
 ## Setup
 
 ```bash
-$ git clone git@github.com:kevinswiber/argo-retail-demo.git && \
+$ git clone git@github.com:apigee/argo-retail-demo.git && \
   cd argo-retail-demo && \
   npm install
 ```
